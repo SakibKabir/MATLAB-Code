@@ -1,0 +1,34 @@
+clc;
+s = 10;
+H = zeros(s);
+
+for c = 1:s
+    for r = 1:s
+        H(r,c) = 1/(r+c-1);
+    end
+end
+
+load count.dat
+c3 = count(:,3);
+c3NaNCount = sum(isnan(c3));
+
+DoveSNR.allSNR{scene, :}
+figure,
+h = histogram(DoveSNR.allSNR{scene, :}); % Histogram
+N = max(h.Values); % Maximum bin count
+mu3 = round(Mean,2); % Data mean
+sigma3 = Std_D; % Data standard deviation
+SDs = mu3 + (1:3)*sigma3;
+hold on
+plot([mu3 mu3],[0 N],'r','LineWidth',1.5) % Mean
+X = repmat(mu3+(1:3)*sigma3, 2, 1);
+Y = repmat([0;N],1,3);
+plot(X,Y,'Color',[255 153 51]./255,'LineWidth',1.5) % Standard deviations
+legend('Data',['Mean (' num2str(mu3) ')'], ['Stds (' num2str(SDs) ')' ])
+legend(['Z=' num2str(z1)],['Z=' num2str(z2)]);
+xlabel('Signal to Noise Ratio')
+ylabel('Number of Observation')
+
+text(0.02, 0.50, tx, 'FontSize', 12);
+
+hold off
